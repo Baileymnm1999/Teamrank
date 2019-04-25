@@ -3,6 +3,8 @@ include 'utils.php';
 
 $conn = connect();
 
+html_header('Schedule');
+
 if (isset($_GET[team]) && isset($_GET[season])) {
     if ($stmt = $conn->prepare("CALL `Team_Schedule`(?, ?)")) {
 
@@ -12,12 +14,15 @@ if (isset($_GET[team]) && isset($_GET[season])) {
         $result = $stmt->get_result();
 
         // turn result set to table
+        table_begin();
         table_header(array("Opponent", "Date", "Result", "Game Type"));
         to_table(array("Opponent", "Date", "Result", "GameType"), $result);
-        table_footer();
+        table_end();
 
         mysqli_stmt_close($stmt);
     }
 }
+
+html_footer();
 
 mysqli_close($conn);
