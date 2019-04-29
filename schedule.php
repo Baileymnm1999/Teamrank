@@ -5,6 +5,8 @@ $conn = connect();
 
 html_header('Schedule');
 
+webpage_begin();
+
 if (isset($_GET[team]) && isset($_GET[season])) {
     if ($stmt = $conn->prepare("CALL `Team_Schedule`(?, ?)")) {
 
