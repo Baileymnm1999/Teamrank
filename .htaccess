@@ -1,0 +1,4 @@
+DirectoryIndex home.php
+
+ErrorDocument 404 /error/404
+ErrorDocument 403 /error/403

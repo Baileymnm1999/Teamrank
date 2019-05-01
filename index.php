@@ -1,4 +1,4 @@
 <?php
 include 'utils.php';
 
-// TODO: Landing page
+header('Location: ./home.php');

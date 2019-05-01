@@ -26,6 +26,10 @@ function html_header($title)
         <meta charset="utf-8">
         <title>' . $title . '</title>
         <link rel="stylesheet" href="./css/bootstrap.min.css">
+        <link rel="stylesheet" href="./css/styles.css">
+        <script type="text/javascript" src="./js/jquery-3.4.0.js"></script>
+        <script type="text/javascript" src="./js/bootstrap.bundle.min.js"></script>
+        <script type="text/javascript" src="./js/scripts.js"></script>
       </head>
     <body>';
 }
@@ -41,32 +45,23 @@ function webpage_begin($active)
 {
     echo
   '<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
+  <a class="navbar-brand" href="#">Teamrank&trade;</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
-
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item ' . (($active == 'Home') ? 'active' : '') . '">
-        <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+      <li class="nav-item">
+        <a class="nav-link ' . (($active == 'Home') ? 'active' : '') . '" href="home">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#">Link</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Dropdown
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Action</a>
-          <a class="dropdown-item" href="#">Another action</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Something else here</a>
-        </div>
+        <a class="nav-link ' . (($active == 'Browse') ? 'active' : '') . '" href="browse">Browse</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+        <a class="nav-link ' . (($active == 'My Leagues') ? 'active' : '') . '" href="my-leagues">My Leagues</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link ' . (($active == 'Manage') ? 'active' : '') . '" href="manage" >Manage</a>
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
@@ -95,12 +90,12 @@ function table_header($columns)
 }
 
 // turns mysqli result set to table body
-function to_table($keys, $data)
+function to_table($keys, $data, $href, $url_param)
 {
     echo '<tbody>';
 
     while ($row = $data->fetch_assoc()) {
-        echo '<tr>';
+        echo '<tr class="clickable-row" data-href="' . sprintf($href, $row[$url_param]) . '">';
 
         foreach ($keys as $key) {
             echo '<td>' . $row[$key] . '</td>';
@@ -134,4 +129,37 @@ function table_footer($links, $cols)
 function table_end()
 {
     echo '</table>';
+}
+
+function authenticate()
+{
+    if (isset($_COOKIE[user])) {
+        $conn = connect();
+
+        if ($stmt = $conn->prepare('SELECT `Username` FROM `User` WHERE `Cookie` = ?')) {
+            $stmt->bind_param('s', $_COOKIE[user]);
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            if ($result->num_rows == 0) {
+                header('HTTP/1.0 403 Forbidden');
+                header('Location: ./403');
+                $stmt->close();
+                $conn->close();
+                exit();
+            }
+
+            $stmt->close();
+        }
+    } else {
+        header('HTTP/1.0 403 Forbidden');
+        header('Location: ./error/403');
+        $conn->close();
+        exit();
+    }
+}
+
+function make_cookie()
+{
+    return substr(md5(rand()), 0, 16);
 }
