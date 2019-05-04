@@ -31,8 +31,8 @@ if (isset($_GET[team]) && isset($_GET[season])) {
         // turn result set to table
         table_begin();
         table_header(array('Opponent', 'Date', 'Result', 'Game Type'));
-        to_table(array('Opponent', 'Date', 'Result', 'GameType'), $result, './schedule.php?team=%u&season=' . $_GET[season], 'TeamID');
-        // table_end();
+        to_table(array('Opponent', 'Date', 'Result', 'GameType'), $result, './schedule?team=%u&season=' . $_GET[season], 'TeamID');
+        table_end();
 
         $stmt->close();
     }

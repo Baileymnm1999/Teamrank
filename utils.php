@@ -27,6 +27,7 @@ function html_header($title)
         <title>' . $title . '</title>
         <link rel="stylesheet" href="./css/bootstrap.min.css">
         <link rel="stylesheet" href="./css/styles.css">
+        <link href="/favicon.ico" type="image/x-icon" rel="icon" />
         <script type="text/javascript" src="./js/jquery-3.4.0.js"></script>
         <script type="text/javascript" src="./js/bootstrap.bundle.min.js"></script>
         <script type="text/javascript" src="./js/scripts.js"></script>
@@ -62,6 +63,9 @@ function webpage_begin($active)
       </li>
       <li class="nav-item">
         <a class="nav-link ' . (($active == 'Manage') ? 'active' : '') . '" href="manage" >Manage</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="logout" >Logout</a>
       </li>
     </ul>
     <form class="form-inline my-2 my-lg-0">
@@ -133,17 +137,19 @@ function table_end()
 
 function authenticate()
 {
-    if (isset($_COOKIE[user])) {
+    if (isset($_COOKIE[user]) && isset($_COOKIE[username])) {
         $conn = connect();
 
-        if ($stmt = $conn->prepare('SELECT `Username` FROM `User` WHERE `Cookie` = ?')) {
+        if ($stmt = $conn->prepare('SELECT `Username`, `Cookie` FROM `User` WHERE `Cookie` = ?')) {
             $stmt->bind_param('s', $_COOKIE[user]);
             $stmt->execute();
             $result = $stmt->get_result();
 
-            if ($result->num_rows == 0) {
-                header('HTTP/1.0 403 Forbidden');
-                header('Location: ./403');
+            $rows = $result->num_rows;
+            $user = $result->fetch_assoc();
+            if ($rows == 0 || $_COOKIE[user] != $user[Cookie] || $_COOKIE[username] != $user[Username]) {
+                setcookie('error', 'Please sign in', time() + 60);
+                header('Location: ./sign-in');
                 $stmt->close();
                 $conn->close();
                 exit();
@@ -151,10 +157,10 @@ function authenticate()
 
             $stmt->close();
         }
-    } else {
-        header('HTTP/1.0 403 Forbidden');
-        header('Location: ./error/403');
         $conn->close();
+    } else {
+        setcookie('error', 'Please sign in', time() + 60);
+        header('Location: ./sign-in');
         exit();
     }
 }

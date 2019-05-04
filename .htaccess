@@ -2,3 +2,9 @@ DirectoryIndex home.php
 
 ErrorDocument 404 /error/404
 ErrorDocument 403 /error/403
+
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule (.*) $1.php [L]
+RewriteCond %{REQUEST_FILENAME}.html -f
+RewriteRule (.*) $1.html [L]
