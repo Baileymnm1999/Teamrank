@@ -10,6 +10,18 @@ webpage_begin('Browse');
 if (isset($_GET[league])) {
     $conn = connect();
 
+    if ($stmt = $conn->prepare('SELECT Name FROM `League` WHERE ID = ?')) {
+
+        // get team name
+        $stmt->bind_param('i', $_GET[league]);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        echo '<h3 style="margin: 10px;">' . $result->fetch_assoc()['Name'] . ' Seasons</h3>';
+
+        $stmt->close();
+    }
+
     if ($stmt = $conn->prepare('CALL `Seasons`(?)')) {
         $stmt->bind_param('i', $_GET[league]);
         $stmt->execute();

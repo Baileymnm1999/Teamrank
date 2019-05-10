@@ -5,12 +5,12 @@ authenticate();
 
 html_header('Schedule');
 
-webpage_begin('Home');
+webpage_begin('Browse');
 
 if (isset($_GET[team]) && isset($_GET[season])) {
     $conn = connect();
 
-    if ($stmt = $conn->prepare('SELECT Name FROM `Team` WHERE TeamID = ? LIMIT 1')) {
+    if ($stmt = $conn->prepare('SELECT Name FROM `Team` WHERE TeamID = ?')) {
 
         // get team name
         $stmt->bind_param('i', $_GET[team]);

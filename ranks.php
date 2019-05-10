@@ -10,6 +10,18 @@ webpage_begin('Browse');
 if (isset($_GET[season])) {
     $conn = connect();
 
+    if ($stmt = $conn->prepare('SELECT Name FROM `League` l JOIN `Season` s ON l.ID = s.LeagueID AND s.ID = ?')) {
+
+        // get team name
+        $stmt->bind_param('i', $_GET[season]);
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        echo '<h3 style="margin: 10px;">' . $result->fetch_assoc()['Name'] . ' Season</h3>';
+
+        $stmt->close();
+    }
+
     if ($stmt = $conn->prepare('CALL `Season_Ranks`(?)')) {
         $stmt->bind_param('i', $_GET[season]);
         $stmt->execute();

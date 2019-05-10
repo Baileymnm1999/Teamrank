@@ -5,16 +5,15 @@ authenticate();
 
 html_header('Browse');
 
-webpage_begin('Browse');
+webpage_begin('My Leagues');
 
 
-echo '<h3 style="margin: 10px;">Leagues</h3>';
+echo '<h3 style="margin: 10px;">My Leagues</h3>';
 
 $conn = connect();
 
-if ($stmt = $conn->prepare('CALL `Leagues`(?, ?)')) {
-    $query = isset($_POST[query]) ? '%' . $_POST[query] . '%' : '%';
-    $stmt->bind_param('is', $_COOKIE[id], $query);
+if ($stmt = $conn->prepare('CALL `My_Leagues`(?)')) {
+    $stmt->bind_param('i', $_COOKIE[id]);
     $stmt->execute();
     $result = $stmt->get_result();
 
@@ -24,7 +23,6 @@ if ($stmt = $conn->prepare('CALL `Leagues`(?, ?)')) {
     // turn result set to table
     table_begin();
     table_header($headers);
-    // to_table($headers, $result, './seasons?league=%u', 'LeagueID');
 
     echo '<tbody>';
 
@@ -35,7 +33,7 @@ if ($stmt = $conn->prepare('CALL `Leagues`(?, ?)')) {
             echo '<td>' . $row[$key] . '</td>';
         }
 
-        echo '<td><a href="./follow?league=' . $row['LeagueID'] . '&origin=' . $_SERVER[REQUEST_URI] . '" class="btn btn-sm btn-' . ($row['Follows'] == 1 ? 'success' : 'info') . '"><span class="fas fa-' . ($row['Follows'] == 1 ? 'check' : 'plus') . '"></span> </a></td>';
+        echo '<td><a href="./follow?league=' . $row['LeagueID'] . '&origin=' . $_SERVER[REQUEST_URI] . '" class="btn btn-sm btn-danger"><span class="fas fa-minus-circle"></span> </a></td>';
 
         echo '</tr>';
     }

@@ -27,18 +27,28 @@ function html_header($title)
         <title>' . $title . '</title>
         <link rel="stylesheet" href="./css/bootstrap.min.css">
         <link rel="stylesheet" href="./css/styles.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
         <link href="/favicon.ico" type="image/x-icon" rel="icon" />
         <script type="text/javascript" src="./js/jquery-3.4.0.js"></script>
         <script type="text/javascript" src="./js/bootstrap.bundle.min.js"></script>
         <script type="text/javascript" src="./js/scripts.js"></script>
       </head>
-    <body>';
+    <body>
+    <div id="wrap">
+    <div id="main" class="container clear-top">';
 }
 
 function html_footer()
 {
     echo
-    '</body>
+    '</div>
+    </div>
+    <footer class="page-footer font-small footer-bottom bg-light">
+        <div class="footer-copyright text-center py-3">Teamrank&trade;&nbsp;&nbsp;
+            <a href="https://github.com/Baileymnm1999/Teamrank/" ><i class="fab fa-github"></i></a>
+        </div>
+    </footer>
+    </body>
     </html>';
 }
 
@@ -68,8 +78,8 @@ function webpage_begin($active)
         <a class="nav-link" href="logout" >Logout</a>
       </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0">
-      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+    <form action="browse" method="POST" class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" name="query" placeholder="Search" aria-label="Search">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
   </div>
@@ -168,4 +178,163 @@ function authenticate()
 function make_cookie()
 {
     return substr(md5(rand()), 0, 16);
+}
+
+function add_season($post_url)
+{
+    echo
+    '<!-- Special version of Bootstrap that only affects content wrapped in .bootstrap-iso -->
+    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+
+    <!-- date picker plugin -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css"/>
+
+    <div class="modal" tabindex="-1" role="dialog" style="display: unset;margin-top: 50px">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add a season</h5>
+          </div>
+          <div class="modal-body">
+              <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+              <div class="bootstrap-iso">
+              <div class="container-fluid">
+              <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+              <form method="post" action="' . $post_url . '">
+               <div class="form-group ">
+                <label class="control-label requiredField" for="startdate">
+                 Start Date
+                 <span class="asteriskField">
+                  *
+                 </span>
+                </label>
+                <input class="form-control" id="startdate" name="startdate" placeholder="MM/DD/YYYY" type="text"/>
+               </div>
+               <div class="form-group ">
+                <label class="control-label " for="enddate">
+                 End Date
+                </label>
+                <input class="form-control" id="enddate" name="enddate" placeholder="MM/DD/YYYY" type="text"/>
+               </div>
+               <div class="form-group">
+                <div>
+                 <button class="btn btn-primary btn-md btn-block bg-info" name="submit" type="submit">
+                  Add Season
+                 </button>
+                </div>
+               </div>
+              </form>
+              </div>
+              </div>
+              </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+';
+}
+
+function add_team($post_url)
+{
+    echo
+    '<!-- Special version of Bootstrap that only affects content wrapped in .bootstrap-iso -->
+    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+
+    <!-- date picker plugin -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css"/>
+
+    <div class="modal" tabindex="-1" role="dialog" style="display: unset;margin-top: 50px">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add a team</h5>
+          </div>
+          <div class="modal-body">
+              <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+              <div class="bootstrap-iso">
+              <div class="container-fluid">
+              <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+              <form method="post" action="' . $post_url . '">
+              <div class="form-group ">
+                <label class="control-label requiredField" for="teamname">
+                  Team Name
+                  <span class="asteriskField">
+                    *
+                  </span>
+                </label>
+                <input class="form-control" id="teamname" name="teamname" placeholder="Cloud9" type="text"/>
+              </div>
+               <div class="form-group">
+                <div>
+                 <button class="btn btn-primary btn-md btn-block bg-info" name="submit" type="submit">
+                  Add Team
+                 </button>
+                </div>
+               </div>
+              </form>
+              </div>
+              </div>
+              </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+';
+}
+
+function add_league()
+{
+    echo
+    '<!-- Special version of Bootstrap that only affects content wrapped in .bootstrap-iso -->
+    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+
+    <!-- date picker plugin -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css"/>
+
+    <div class="modal" tabindex="-1" role="dialog" style="display: unset;margin-top: 50px">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add a league</h5>
+          </div>
+          <div class="modal-body">
+              <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+              <div class="bootstrap-iso">
+              <div class="container-fluid">
+              <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12">
+              <form method="post" action="./addleague">
+              <div class="form-group ">
+                <label class="control-label requiredField" for="leaguename">
+                  Team Name
+                  <span class="asteriskField">
+                    *
+                  </span>
+                </label>
+                <input class="form-control" id="leaguename" name="leaguename" placeholder="RLCS" type="text"/>
+              </div>
+               <div class="form-group">
+                <div>
+                 <button class="btn btn-primary btn-md btn-block bg-info" name="submit" type="submit">
+                  Add League
+                 </button>
+                </div>
+               </div>
+              </form>
+              </div>
+              </div>
+              </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+';
 }
