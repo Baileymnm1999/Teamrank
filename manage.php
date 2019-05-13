@@ -32,6 +32,9 @@ if (isset($_GET[league])) {
         echo '<h3 style="margin: 10px;">Manage ' . $result->fetch_assoc()['Name'] . '</h3>';
 
         $stmt->close();
+    } else {
+        header('Location: ./error/500');
+        exit();
     }
 
     echo '<div class="row" style="margin: 0;">';
@@ -71,6 +74,9 @@ if (isset($_GET[league])) {
         table_end();
 
         $stmt->close();
+    } else {
+        header('Location: ./error/500');
+        exit();
     }
 
     echo '</div>';
@@ -94,6 +100,9 @@ if (isset($_GET[league])) {
         table_end();
 
         $stmt->close();
+    } else {
+        header('Location: ./error/500');
+        exit();
     }
 
     echo '</div></div>';
@@ -103,7 +112,7 @@ if (isset($_GET[league])) {
         html_footer();
         exit();
     }
-    
+
     echo '<h3 style="margin: 10px;">Moderated Leagues</h3>';
 
     if ($stmt = $conn->prepare('CALL `Moderated_Leagues`(?)')) {
@@ -138,6 +147,9 @@ if (isset($_GET[league])) {
         table_end();
 
         $stmt->close();
+    } else {
+        header('Location: ./error/500');
+        exit();
     }
 }
 $conn->close();

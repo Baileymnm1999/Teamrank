@@ -11,7 +11,11 @@ if (isset($_GET[league]) && isset($_GET[origin])) {
         $stmt->execute();
 
         $stmt->close();
+    } else {
+        header('Location: ./error/500');
+        exit();
     }
+    
     header('Location: ' . $_GET[origin]);
     exit();
 }

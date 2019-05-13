@@ -11,7 +11,7 @@ function connect()
         echo 'Error: Unable to connect to MySQL.' . PHP_EOL;
         echo 'Debugging errno: ' . $conn->errno() . PHP_EOL;
         echo 'Debugging error: ' . $conn->error() . PHP_EOL;
-        exit;
+        exit();
     }
 
     return $conn;

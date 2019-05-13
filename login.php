@@ -38,7 +38,13 @@ if (isset($_POST[username]) && isset($_POST[password])) {
             setcookie('user', $cookie, time() + 3600);
             setcookie('username', $_POST[username], time() + 3600);
             setcookie('id', $user[ID]);
+        } else {
+            header('Location: ./error/500');
+            exit();
         }
+    } else {
+        header('Location: ./error/500');
+        exit();
     }
     $conn->close();
 } else {

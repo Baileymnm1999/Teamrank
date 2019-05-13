@@ -21,6 +21,9 @@ if (isset($_GET[season])) {
         table_end();
 
         $stmt->close();
+    } else {
+        header('Location: ./error/500');
+        exit();
     }
     $conn->close();
 }

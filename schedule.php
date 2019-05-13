@@ -20,7 +20,11 @@ if (isset($_GET[team]) && isset($_GET[season])) {
         echo '<h3 style="margin: 10px;">' . $result->fetch_assoc()['Name'] . ' Schedule</h3>';
 
         $stmt->close();
+    } else {
+        header('Location: ./error/500');
+        exit();
     }
+
     if ($stmt = $conn->prepare('CALL `Team_Schedule`(?, ?)')) {
 
         // execute stored procedure for schedule
@@ -35,7 +39,11 @@ if (isset($_GET[team]) && isset($_GET[season])) {
         table_end();
 
         $stmt->close();
+    } else {
+        header('Location: ./error/500');
+        exit();
     }
+    
     $conn->close();
 }
 

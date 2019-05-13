@@ -45,7 +45,11 @@ if ($stmt = $conn->prepare('CALL `Leagues`(?, ?)')) {
     table_end();
 
     $stmt->close();
+} else {
+    header('Location: ./error/500');
+    exit();
 }
+
 $conn->close();
 
 html_footer();

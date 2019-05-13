@@ -20,6 +20,9 @@ if (isset($_GET[league])) {
         echo '<h3 style="margin: 10px;">' . $result->fetch_assoc()['Name'] . ' Seasons</h3>';
 
         $stmt->close();
+    } else {
+        header('Location: ./error/500');
+        exit();
     }
 
     if ($stmt = $conn->prepare('CALL `Seasons`(?)')) {
@@ -35,6 +38,9 @@ if (isset($_GET[league])) {
         table_end();
 
         $stmt->close();
+    } else {
+        header('Location: ./error/500');
+        exit();
     }
     $conn->close();
 }
