@@ -10,7 +10,7 @@ webpage_begin('Browse');
 if (isset($_GET[season])) {
     $conn = connect();
 
-    if ($stmt = $conn->prepare('SELECT Name FROM `League` l JOIN `Season` s ON l.ID = s.LeagueID AND s.ID = ?')) {
+    if ($stmt = $conn->prepare('CALL `Get_League_of_Season`(?)')) {
 
         // get team name
         $stmt->bind_param('i', $_GET[season]);

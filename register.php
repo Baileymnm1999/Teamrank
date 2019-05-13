@@ -6,7 +6,7 @@ if (!isset($_POST[username]) || !isset($_POST[password])) {
 } else {
     $conn = connect();
 
-    if ($stmt = $conn->prepare('INSERT INTO `User`(`Username`, `Password`, `Cookie`) VALUES (?, ?, ?)')) {
+    if ($stmt = $conn->prepare('CALL `Create_User`(?, ?, ?)')) {
         $cookie = make_cookie();
 
         $stmt->bind_param('sss', $_POST[username], password_hash($_POST[password], PASSWORD_DEFAULT), $cookie);

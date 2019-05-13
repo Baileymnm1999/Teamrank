@@ -30,7 +30,7 @@ if (isset($_POST[username]) && isset($_POST[password])) {
 
         $cookie = make_cookie();
 
-        if ($stmt = $conn->prepare('UPDATE `User` SET `Cookie` = ? WHERE `Username` = ?')) {
+        if ($stmt = $conn->prepare('CALL `Set_Cookie`(?, ?)')) {
             $stmt->bind_param('ss', $cookie, $_POST[username]);
             $stmt->execute();
             $stmt->close();
