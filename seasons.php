@@ -22,6 +22,7 @@ if (isset($_GET[league])) {
         $stmt->close();
     } else {
         header('Location: ./error/500');
+        $conn->close();
         exit();
     }
 
@@ -34,12 +35,13 @@ if (isset($_GET[league])) {
         // turn result set to table
         table_begin();
         table_header($headers);
-        to_table($headers, $result, './ranks?season=%u', 'Season');
+        to_table($headers, $result, './ranks?season=%u', 'ID');
         table_end();
 
         $stmt->close();
     } else {
         header('Location: ./error/500');
+        $conn->close();
         exit();
     }
     $conn->close();

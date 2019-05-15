@@ -150,14 +150,14 @@ function authenticate()
     if (isset($_COOKIE[user]) && isset($_COOKIE[username])) {
         $conn = connect();
 
-        if ($stmt = $conn->prepare('SELECT `Username`, `Cookie` FROM `User` WHERE `Cookie` = ?')) {
+        if ($stmt = $conn->prepare('SELECT `Username`, `Cookie`, `ID` FROM `User` WHERE `Cookie` = ?')) {
             $stmt->bind_param('s', $_COOKIE[user]);
             $stmt->execute();
             $result = $stmt->get_result();
 
             $rows = $result->num_rows;
             $user = $result->fetch_assoc();
-            if ($rows == 0 || $_COOKIE[user] != $user[Cookie] || $_COOKIE[username] != $user[Username]) {
+            if ($rows == 0 || $_COOKIE[user] != $user[Cookie] || $_COOKIE[username] != $user[Username] || $_COOKIE[id] != $user[ID]) {
                 setcookie('error', 'Please sign in', time() + 60);
                 header('Location: ./sign-in');
                 $stmt->close();
@@ -210,14 +210,142 @@ function add_season($post_url)
                   *
                  </span>
                 </label>
-                <input class="form-control" id="startdate" name="startdate" placeholder="MM/DD/YYYY" type="text"/>
+                <input class="form-control" id="startdate" name="startdate" placeholder="MM/DD/YYYY" type="text" ' . (isset($_GET[start]) ? 'value="' . date("m/d/Y", strtotime($_GET[start])) .'"' : '') . '/>
                </div>
                <div class="form-group ">
                 <label class="control-label " for="enddate">
                  End Date
                 </label>
-                <input class="form-control" id="enddate" name="enddate" placeholder="MM/DD/YYYY" type="text"/>
+                <input class="form-control" id="enddate" name="enddate" placeholder="MM/DD/YYYY" type="text" ' . (isset($_GET[end]) ? 'value="' . date("m/d/Y", strtotime($_GET[end])) . '"' : '') . '/>
                </div>
+               <div class="form-group">
+                <div>
+                 <button class="btn btn-primary btn-md btn-block bg-info" name="submit" type="submit">
+                  ' . (isset($_GET[season]) ? 'Update' : 'Add') . ' Season
+                 </button>
+                </div>
+               </div>
+              </form>
+              </div>
+              </div>
+              </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+';
+}
+
+function add_game($post_url)
+{
+    if (isset($_GET[season])) {
+        $conn = connect();
+        if ($stmt = $conn->prepare('CALL `Get_Eligable_Teams`(?)')) {
+            $stmt->bind_param('i', $_GET[season]);
+            $stmt->execute();
+
+            $results = $stmt->get_result();
+            $teams = array();
+
+            while ($row = $results->fetch_assoc()) {
+                $teams[$row[ID]] = $row[Name];
+            }
+
+            $stmt->close();
+        } else {
+            header('Location: ./error/500');
+            $conn->close();
+            exit();
+        }
+    }
+    echo
+    '<!-- Special version of Bootstrap that only affects content wrapped in .bootstrap-iso -->
+    <link rel="stylesheet" href="https://formden.com/static/cdn/bootstrap-iso.css" />
+
+    <!-- date picker plugin -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.8.0/css/bootstrap-datepicker.min.css"/>
+
+    <div class="modal" tabindex="-1" role="dialog" style="display: unset;margin-top: 50px">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Add a game</h5>
+          </div>
+          <div class="modal-body">
+              <!-- HTML Form (wrapped in a .bootstrap-iso div) -->
+              <div class="bootstrap-iso">
+              <div class="container-fluid">
+              <div class="row">
+              <div class="col-md-12 col-sm-12 col-xs-12" style="padding: 0px;">
+              <form method="post" action="' . $post_url . '">
+               <div class="form-group ">
+                <label class="control-label requiredField" for="startdate">
+                 Date
+                 <span class="asteriskField">
+                  *
+                 </span>
+                </label>
+                <input class="form-control" id="startdate" name="startdate" placeholder="MM/DD/YYYY" type="text"/>
+               </div>
+               </div>
+                 <div class="form-group ">
+                  <label class="control-label requiredField" for="teamA">
+                   First Team
+                   <span class="asteriskField">
+                    *
+                   </span>
+                  </label>
+                  <select class="select form-control" id="teamA" name="teamA">';
+    foreach ($teams as $id => $name) {
+        echo '<option value="' . $id . '">' . $name . '</option>';
+    }
+    echo
+                  '</select>
+                 </div>
+                 <div class="form-group ">
+                  <label class="control-label requiredField" for="teamB">
+                   Second Team
+                   <span class="asteriskField">
+                    *
+                   </span>
+                  </label>
+                  <select class="select form-control" id="teamB" name="teamB">';
+
+    foreach ($teams as $id => $name) {
+        echo '<option value="' . $id . '">' . $name . '</option>';
+    }
+    echo
+                   '</select>
+                 </div>
+                 <div class="form-group" id="div_winner" style="margin-left: 40px;">
+                  <label class="control-label " for="winner">
+                   Winner
+                  </label>
+                  <div class="">
+                   <label class="radio">
+                    <input name="winner" type="radio" value="a"/>
+                    First Team
+                   </label>
+                   <label class="radio">
+                    <input name="winner" type="radio" value="b"/>
+                    Second Team
+                   </label>
+                  </div>
+                 </div>
+                 <div class="form-group ">
+                  <label class="control-label " for="winningscore">
+                   Winning Score
+                  </label>
+                  <input class="form-control" id="winningscore" name="winningscore" placeholder="0" type="text"/>
+                 </div>
+                 <div class="form-group ">
+                  <label class="control-label " for="losingscore">
+                   Losing Score
+                  </label>
+                  <input class="form-control" id="losingscore" name="losingscore" placeholder="0" type="text"/>
+                 </div>
                <div class="form-group">
                 <div>
                  <button class="btn btn-primary btn-md btn-block bg-info" name="submit" type="submit">
@@ -267,7 +395,7 @@ function add_team($post_url)
                     *
                   </span>
                 </label>
-                <input class="form-control" id="teamname" name="teamname" placeholder="Cloud9" type="text"/>
+                <input class="form-control" id="teamname" name="teamname" placeholder="Cloud9" type="text" ' . (isset($_GET[name]) ? 'value="' . $_GET[name] . '"' : '') . '/>
               </div>
                <div class="form-group">
                 <div>
@@ -310,7 +438,7 @@ function add_league()
               <div class="container-fluid">
               <div class="row">
               <div class="col-md-12 col-sm-12 col-xs-12">
-              <form method="post" action="./addleague">
+              <form method="post" action="./addleague' . (isset($_GET[league]) ? '?editLeague=' . $_GET[league] : '') . '">
               <div class="form-group ">
                 <label class="control-label requiredField" for="leaguename">
                   Team Name
@@ -318,12 +446,12 @@ function add_league()
                     *
                   </span>
                 </label>
-                <input class="form-control" id="leaguename" name="leaguename" placeholder="RLCS" type="text"/>
+                <input class="form-control" id="leaguename" name="leaguename" placeholder="RLCS" type="text" ' . (isset($_GET[name]) ? 'value="' . $_GET[name] . '"' : '') . '/>
               </div>
                <div class="form-group">
                 <div>
                  <button class="btn btn-primary btn-md btn-block bg-info" name="submit" type="submit">
-                  Add League
+                  ' . (isset($_GET[league]) ? 'Update' : 'Add') . ' League
                  </button>
                 </div>
                </div>
