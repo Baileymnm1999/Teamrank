@@ -95,7 +95,7 @@ if (isset($_GET[league])) {
         echo '</tbody>';
 
 
-        echo '<tr><td colspan="4" class="text-center"><a href="./manage?addseason=1&league=' . $_GET[league] . '" class="btn btn-sm btn-info"><span class="fas fa-plus"></span>&nbsp;&nbsp;&nbsp;Add a season</a></td>';
+        echo '<tr><td colspan="5" class="text-center"><a href="./manage?addseason=1&league=' . $_GET[league] . '" class="btn btn-sm btn-info"><span class="fas fa-plus"></span>&nbsp;&nbsp;&nbsp;Add a season</a></td>';
 
         table_end();
 
@@ -138,7 +138,7 @@ if (isset($_GET[league])) {
 
         echo '</tbody>';
 
-        echo '<tr><td colspan="3" class="text-center"><a href="./manage?addteam=1&league=' . $_GET[league] . '" class="btn btn-sm btn-info"><span class="fas fa-plus"></span>&nbsp;&nbsp;&nbsp;Add a team</a></td>';
+        echo '<tr><td colspan="4" class="text-center"><a href="./manage?addteam=1&league=' . $_GET[league] . '" class="btn btn-sm btn-info"><span class="fas fa-plus"></span>&nbsp;&nbsp;&nbsp;Add a team</a></td>';
 
         table_end();
 
@@ -235,7 +235,7 @@ if (isset($_GET[league])) {
 
         echo '</tbody>';
 
-        echo '<tr><td colspan="4" class="text-center"><a href="./manage?addleague=1" class="btn btn-sm btn-info"><span class="fas fa-plus"></span>&nbsp;&nbsp;&nbsp;Add a league</a></td>';
+        echo '<tr><td colspan="5" class="text-center"><a href="./manage?addleague=1" class="btn btn-sm btn-info"><span class="fas fa-plus"></span>&nbsp;&nbsp;&nbsp;Add a league</a></td>';
 
         table_end();
 

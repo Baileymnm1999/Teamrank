@@ -349,7 +349,7 @@ function add_game($post_url)
                <div class="form-group">
                 <div>
                  <button class="btn btn-primary btn-md btn-block bg-info" name="submit" type="submit">
-                  Add Season
+                  Add Game
                  </button>
                 </div>
                </div>
@@ -441,7 +441,7 @@ function add_league()
               <form method="post" action="./addleague' . (isset($_GET[league]) ? '?editLeague=' . $_GET[league] : '') . '">
               <div class="form-group ">
                 <label class="control-label requiredField" for="leaguename">
-                  Team Name
+                  League Name
                   <span class="asteriskField">
                     *
                   </span>

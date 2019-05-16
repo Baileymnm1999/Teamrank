@@ -50,4 +50,19 @@ if (isset($_GET[team])) {
     }
 }
 
+if (isset($_GET[game])) {
+    if ($stmt = $conn->prepare('CALL `Delete_Game`(?)')) {
+
+        // get team name
+        $stmt->bind_param('i', $_GET[game]);
+        $stmt->execute();
+
+        header('Location: ' . $_GET[origin] . '&order=' . $_GET[order]);
+
+        $stmt->close();
+    } else {
+        header('Location: ./error/500');
+    }
+}
+
 $conn->close();

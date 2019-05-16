@@ -24,7 +24,8 @@ if (isset($_GET[season]) && isset($_GET[order])) {
 
             // get team name
             if (isset($_POST[startdate]) && isset($_POST[teamA]) && isset($_POST[teamB]) && isset($_POST[winner]) && isset($_POST[winningscore]) && isset($_POST[losingscore]) && $_POST[teamA] != $_POST[teamB]) {
-                $stmt->bind_param('isiiiii', $_GET[season], $_POST[startdate], $_POST[teamA], $_POST[teamB], ($_POST[winner] == "a" ? $_POST[teamA] : $_POST[teamB]), $_POST[winningscore], $_POST[losingscore]);
+                $winner = ($_POST[winner] == "a" ? $_POST[teamA] : $_POST[teamB]);
+                $stmt->bind_param('isiiiii', $_GET[season], $_POST[startdate], $_POST[teamA], $_POST[teamB], $winner, $_POST[winningscore], $_POST[losingscore]);
                 $stmt->execute();
             }
 
